@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>冰箱里有什么</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'display': ['"Press Start 2P"', 'cursive'],
+              'body': ['"VT323"', 'monospace'],
+            },
+            colors: {
+              'mario-bg': '#5C94FC', // Sky blue
+              'mario-ground': '#C84C0C', // Ground brick orange
+              'mario-cream': '#FDFBF0',
+              'mario-yellow': '#FBD000', // Coin yellow
+              'mario-red': '#E52521', // Mario red
+              'mario-blue': '#005AC1', // Mario overalls
+              'mario-green': '#43B047', // Pipe green
+              'mario-brown': '#682F16', // Goomba brown
+            },
+            boxShadow: {
+              'pixel': '4px 4px 0px 0px rgba(0, 0, 0, 1)',
+              'pixel-sm': '2px 2px 0px 0px rgba(0, 0, 0, 1)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #5C94FC; /* Mario Sky Blue */
+        background-image: 
+          linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+      /* Custom scrollbar for pixel feel */
+      ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #E52521;
+        border: 2px solid #000;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "date-fns": "https://aistudiocdn.com/date-fns@^4.1.0",
+    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

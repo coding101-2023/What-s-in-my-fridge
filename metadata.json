@@ -1,0 +1,7 @@
+{
+  "name": "冰箱里有什么",
+  "description": "A retro-cartoon styled fridge inventory manager powered by Gemini. Track expiration dates, scan to shop, and manage food consumption.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
