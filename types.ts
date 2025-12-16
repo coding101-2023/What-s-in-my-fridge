@@ -11,7 +11,9 @@ export enum Category {
 
 export interface FoodItem {
   id: string;
-  name: string;
+  name: string; // Fallback / Primary ID
+  nameEn?: string;
+  nameZh?: string;
   category: Category;
   productionDate?: string; // ISO Date string YYYY-MM-DD
   purchaseDate: string;   // ISO Date string YYYY-MM-DD
@@ -22,15 +24,44 @@ export interface FoodItem {
 }
 
 export interface ScannedFoodData {
-  name: string;
+  nameEn: string;
+  nameZh: string;
   category: Category;
   productionDate?: string;
   expiryDate?: string;
   weight?: string;
 }
 
+export interface ReceiptData {
+  date: string | null;
+  items: {
+    nameEn: string;
+    nameZh: string;
+    category: Category;
+    quantity?: string; // e.g. "2", "500g"
+  }[];
+}
+
+export interface VideoLink {
+  title: string;
+  url: string;
+  platform: 'Xiaohongshu' | 'Douyin' | 'YouTube' | 'TikTok' | 'Web';
+}
+
+export interface Recipe {
+  name: string;
+  description: string;
+  ingredientsUsed: string[];      // Ingredients available in fridge
+  missingIngredients: string[];   // Ingredients to buy
+  instructions: string[];         // Step by step
+  videoLinks: VideoLink[];        // External video links
+  imageUrl?: string;              // URL from search or generation
+  imageLoading?: boolean;
+}
+
 export interface SearchResult {
   found: boolean;
   item?: FoodItem;
-  message: string;
+  scannedNameEn: string;
+  scannedNameZh: string;
 }

@@ -3,32 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>冰箱里有什么</title>
+    <title>What's in my fridge</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@600;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              'display': ['"Press Start 2P"', 'cursive'],
-              'body': ['"VT323"', 'monospace'],
+              'display': ['"Dosis"', 'sans-serif'],
+              'body': ['"Nunito"', 'sans-serif'],
             },
             colors: {
-              'mario-bg': '#5C94FC', // Sky blue
-              'mario-ground': '#C84C0C', // Ground brick orange
-              'mario-cream': '#FDFBF0',
-              'mario-yellow': '#FBD000', // Coin yellow
-              'mario-red': '#E52521', // Mario red
-              'mario-blue': '#005AC1', // Mario overalls
-              'mario-green': '#43B047', // Pipe green
-              'mario-brown': '#682F16', // Goomba brown
+              'totoro-bg': '#E8F3F1', 
+              'totoro-grey': '#7D8C96', 
+              'totoro-belly': '#F4F3EE', 
+              'forest-green': '#2D5E43',
+              'leaf-green': '#88B04B', 
+              'catbus-orange': '#E8A856', 
+              'ginger-yellow': '#F0C960', // Vintage Fridge Yellow
+              'ginger-dark': '#D4A017',   // Shadow
+              'soot-black': '#2A2A2A', 
+              'sky-blue': '#A7D7E8', 
+              'wood': '#8B5A2B',
             },
             boxShadow: {
-              'pixel': '4px 4px 0px 0px rgba(0, 0, 0, 1)',
-              'pixel-sm': '2px 2px 0px 0px rgba(0, 0, 0, 1)',
+              'soft': '0 4px 14px 0 rgba(0, 0, 0, 0.1)',
+              'soft-lg': '0 10px 25px 0 rgba(0, 0, 0, 0.1)',
+              'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'wiggle': 'wiggle 1s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              wiggle: {
+                '0%, 100%': { transform: 'rotate(-3deg)' },
+                '50%': { transform: 'rotate(3deg)' },
+              }
             }
           }
         }
@@ -36,23 +54,74 @@
     </script>
     <style>
       body {
-        background-color: #5C94FC; /* Mario Sky Blue */
-        background-image: 
-          linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-        background-size: 20px 20px;
+        /* Ghibli Forest Watercolor Vibe */
+        background: linear-gradient(135deg, #A7D7E8 0%, #E8F3F1 40%, #C8E6C9 100%);
+        background-attachment: fixed;
+        color: #2A2A2A;
+        overflow-x: hidden;
       }
-      /* Custom scrollbar for pixel feel */
-      ::-webkit-scrollbar {
+      
+      /* Soot Sprite CSS */
+      .soot-sprite {
+        width: 40px;
+        height: 40px;
+        background: #2A2A2A;
+        border-radius: 50%;
+        position: relative;
+        filter: blur(0.5px);
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .soot-sprite::before { /* Spikes/Fuzz */
+        content: '';
+        position: absolute;
+        top: -5px; left: -5px; right: -5px; bottom: -5px;
+        border-radius: 50%;
+        border: 2px dashed #2A2A2A;
+        animation: spin 10s linear infinite;
+        opacity: 0.5;
+      }
+      .soot-sprite .eye {
+        position: absolute;
+        top: 10px;
         width: 12px;
         height: 12px;
+        background: white;
+        border-radius: 50%;
       }
-      ::-webkit-scrollbar-track {
-        background: #000;
+      .soot-sprite .eye.left { left: 6px; }
+      .soot-sprite .eye.right { right: 6px; }
+      .soot-sprite .pupil {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 4px;
+        height: 4px;
+        background: black;
+        border-radius: 50%;
       }
-      ::-webkit-scrollbar-thumb {
-        background: #E52521;
-        border: 2px solid #000;
+      
+      .fridge-door {
+        transform-origin: left;
+        transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        backface-visibility: hidden;
+      }
+      .door-open-top {
+        transform: rotateY(-110deg);
+      }
+      .door-open-bottom {
+        transform: rotateY(-110deg);
+        transition-delay: 0.1s;
+      }
+
+      @keyframes spin { 100% { transform: rotate(360deg); } }
+
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
       }
     </style>
   <script type="importmap">

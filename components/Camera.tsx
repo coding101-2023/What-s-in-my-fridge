@@ -59,12 +59,31 @@ const Camera: React.FC<CameraProps> = ({ onCapture, onClose, label }) => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      
+      // Resize logic
+      const MAX_DIMENSION = 800;
+      let width = video.videoWidth;
+      let height = video.videoHeight;
+      
+      if (width > height) {
+        if (width > MAX_DIMENSION) {
+          height = Math.round(height * (MAX_DIMENSION / width));
+          width = MAX_DIMENSION;
+        }
+      } else {
+        if (height > MAX_DIMENSION) {
+          width = Math.round(width * (MAX_DIMENSION / height));
+          height = MAX_DIMENSION;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        ctx.drawImage(video, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
         const base64 = dataUrl.split(',')[1];
         setCapturedImages(prev => [...prev, base64]);
       }
@@ -79,45 +98,47 @@ const Camera: React.FC<CameraProps> = ({ onCapture, onClose, label }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2">
-      <RetroCard className="w-full max-w-lg flex flex-col items-center relative gap-2 h-full max-h-[90vh]" color="cream">
+    <div className="fixed inset-0 bg-forest-green/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-4">
+      <RetroCard className="w-full max-w-lg flex flex-col items-center relative gap-4 h-full max-h-[90vh]" color="cream">
          <button 
           onClick={() => { stopCamera(); onClose(); }}
-          className="absolute top-2 right-2 bg-mario-red text-white w-10 h-10 border-4 border-black flex items-center justify-center font-display shadow-pixel-sm active:translate-y-1 active:shadow-none z-10"
+          className="absolute top-4 right-4 bg-red-400 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-soft hover:bg-red-500 transition-colors z-10"
         >
-          X
+          ✕
         </button>
         
-        <h2 className="text-xl font-display text-black mt-2 mb-2 text-center w-full">{label}</h2>
+        <h2 className="text-2xl font-display font-bold text-forest-green mt-2 text-center w-full tracking-wide">
+            {label} 🍃
+        </h2>
 
         {error ? (
           <div className="flex flex-col items-center justify-center p-8 text-center min-h-[300px] flex-1">
-            <div className="text-4xl mb-4">🚫</div>
-            <div className="text-mario-red font-bold font-body text-xl mb-4">{error}</div>
+            <div className="text-6xl mb-4">🌰</div>
+            <div className="text-red-500 font-bold font-body text-xl mb-4">{error}</div>
             {permissionDenied && (
-              <p className="text-lg mb-4 text-black font-body">
+              <p className="text-lg mb-4 text-gray-600 font-body">
                 Please allow camera access in your browser settings.
               </p>
             )}
             <button 
               onClick={startCamera}
-              className="bg-mario-blue text-white px-6 py-4 border-4 border-black shadow-pixel hover:translate-y-1 hover:shadow-none font-display text-sm"
+              className="bg-sky-blue text-white px-8 py-3 rounded-full shadow-soft hover:shadow-soft-lg font-display text-lg transition-all"
             >
-              TRY AGAIN
+              Try Again
             </button>
           </div>
         ) : (
           <>
             {/* Viewfinder */}
-            <div className="relative w-full flex-1 bg-black overflow-hidden border-4 border-black shadow-pixel-sm">
+            <div className="relative w-full flex-1 bg-black rounded-3xl overflow-hidden shadow-soft-lg border-4 border-white">
               <video 
                 ref={videoRef} 
                 autoPlay 
                 playsInline 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-2 left-2 right-2 text-white font-body text-shadow text-center text-xl bg-black/50 px-2 py-1 border-2 border-white">
-                 {capturedImages.length} PHOTOS TAKEN
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-white font-body text-lg">
+                 {capturedImages.length} Captured
               </div>
             </div>
             
@@ -125,15 +146,15 @@ const Camera: React.FC<CameraProps> = ({ onCapture, onClose, label }) => {
 
             {/* Thumbnails Strip */}
             {capturedImages.length > 0 && (
-              <div className="w-full h-20 flex gap-2 overflow-x-auto p-1 border-2 border-black bg-mario-bg">
+              <div className="w-full h-20 flex gap-2 overflow-x-auto p-2 bg-white/50 rounded-2xl">
                 {capturedImages.map((img, idx) => (
-                  <div key={idx} className="h-full aspect-square border-2 border-white relative shrink-0">
+                  <div key={idx} className="h-full aspect-square rounded-xl overflow-hidden relative shrink-0 shadow-sm border border-white">
                     <img src={`data:image/jpeg;base64,${img}`} className="w-full h-full object-cover" alt="thumb" />
                     <button 
                        onClick={() => setCapturedImages(capturedImages.filter((_, i) => i !== idx))}
-                       className="absolute -top-2 -right-2 bg-mario-red text-white text-xs w-5 h-5 flex items-center justify-center border-2 border-black"
+                       className="absolute top-1 right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center"
                     >
-                      x
+                      ✕
                     </button>
                   </div>
                 ))}
@@ -141,23 +162,23 @@ const Camera: React.FC<CameraProps> = ({ onCapture, onClose, label }) => {
             )}
 
             {/* Controls */}
-            <div className="w-full flex justify-between items-center px-4 py-2 gap-4">
+            <div className="w-full flex justify-between items-center px-4 py-2">
                <div className="w-16"></div> {/* Spacer */}
                
                <button
                 onClick={captureFrame}
-                className="w-20 h-20 rounded-full bg-white border-4 border-black flex items-center justify-center active:scale-95 transition-all shadow-pixel"
+                className="w-20 h-20 rounded-full bg-white border-4 border-gray-200 flex items-center justify-center active:scale-95 transition-all shadow-soft-lg group"
               >
-                <div className="w-16 h-16 rounded-full bg-mario-red border-2 border-black"></div>
+                <div className="w-16 h-16 rounded-full bg-red-400 group-hover:bg-red-500 transition-colors border-4 border-white"></div>
               </button>
 
               <div className="w-16 flex justify-end">
                 {capturedImages.length > 0 && (
                    <button 
                      onClick={handleFinish}
-                     className="bg-mario-green text-white p-3 border-4 border-black shadow-pixel active:translate-y-1 active:shadow-none"
+                     className="bg-forest-green text-white w-14 h-14 rounded-full shadow-soft flex items-center justify-center hover:bg-green-800 transition-colors"
                    >
-                     <span className="font-display text-xs">OK!</span>
+                     <span className="text-2xl">✓</span>
                    </button>
                 )}
               </div>
